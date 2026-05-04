@@ -11,16 +11,35 @@ TypeError: e is not a function
 ## Run
 
 ```bash
-bun install --ignore-scripts
+bun install
 bun run dev
 ```
 
-The dev server should start normally.
-
 ```bash
-bun run repro
+bun run build
+npm run preview -- --port 8798
 ```
 
-Expected result: `bun run repro` builds successfully, then `scripts/check-client-cycle.mjs` fails with the detected bad client chunk cycle.
+Expected result: the dev server starts normally, the production build completes, and preview serves the page. In the browser, the preview build fails during client runtime with `TypeError: e is not a function`.
+
+## Debug
+
+The build keeps client sourcemaps enabled. Keep Vite minification enabled: disabling minification changes the generated chunk shape and can hide this bug.
+
+After `bun run build`, run:
+
+```bash
+node scripts/check-client-cycle.mjs
+```
+
+Expected result: the checker prints the generated chunk path, line, column, and nearby source for the bad `#entry` helper call.
+
+Current output maps the generated chunk back through the sourcemap to:
+
+```text
+node_modules/.cache/@vue/runtime-dom/dist/runtime-dom.esm-bundler.js:1996:22
+```
+
+That is the same runtime location reported by the browser preview error around `initVShowForSSR`.
 
 The Nuxt UI setup follows the documented Nuxt install path: `@nuxt/ui` in `modules`, `app/assets/css/main.css` importing `tailwindcss` and `@nuxt/ui`, and `UApp` wrapping `NuxtPage`.
