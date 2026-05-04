@@ -12,7 +12,15 @@ TypeError: e is not a function
 
 ```bash
 bun install --ignore-scripts
+bun run dev
+```
+
+The dev server should start normally.
+
+```bash
 bun run repro
 ```
 
 Expected result: `bun run repro` builds successfully, then `scripts/check-client-cycle.mjs` fails with the detected bad client chunk cycle.
+
+The Nuxt UI setup follows the documented Nuxt install path: `@nuxt/ui` in `modules`, `app/assets/css/main.css` importing `tailwindcss` and `@nuxt/ui`, and `UApp` wrapping `NuxtPage`.
