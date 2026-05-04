@@ -1,0 +1,17 @@
+{
+  "name": "nuxt-ui-cloudflare-entry-cycle-repro",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "check:cycle": "node scripts/check-client-cycle.mjs",
+    "repro": "bun run build && bun run check:cycle"
+  },
+  "dependencies": {
+    "@nuxt/ui": "4.7.1",
+    "nuxt": "npm:nuxt-nightly@5.0.0-29617108.3a2e081f",
+    "tailwindcss": "^4.2.4",
+    "vue": "^3.5.32",
+    "vue-router": "^5.0.4"
+  }
+}
